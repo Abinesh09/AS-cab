@@ -15,10 +15,26 @@
     "android": {
       "package": "com.anonymous.ascabapp"
     },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 34,
+            "targetSdkVersion": 34,
+            "buildToolsVersion": "34.0.0",
+            "kotlinVersion": "1.9.23"
+          }
+        }
+      ]
+    ],
     "extra": {
       "eas": {
         "projectId": "f2e82675-85bf-4888-b7bb-6d90c9c84136"
       }
-    }
+    },
+    "plugins": [
+      "expo-build-properties"
+    ]
   }
 }
