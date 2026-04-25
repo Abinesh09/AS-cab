@@ -1,0 +1,20 @@
+# .gitignore for AS Cab project
+# Backend
+backend/.env
+backend/ascab-server
+backend/uploads/
+
+# Mobile
+mobile/node_modules/
+mobile/.expo/
+mobile/android/app/build/
+mobile/ios/build/
+mobile/*.keystore
+
+# Docker
+nginx/certs/
+
+# IDE
+.vscode/
+.idea/
+*.DS_Store

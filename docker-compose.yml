@@ -1,0 +1,75 @@
+services:
+  # ─── PostgreSQL Database ──────────────────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    container_name: ascab_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-admin}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+      POSTGRES_DB: ${DB_NAME:-cabapp}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - ascab_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-admin} -d ${DB_NAME:-cabapp}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── Golang Backend ───────────────────────────────────────────────────────
+  app:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ascab_app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: 8080
+      DB_HOST: db
+      DB_USER: ${DB_USER:-admin}
+      DB_PASSWORD: ${DB_PASSWORD:-password}
+      DB_NAME: ${DB_NAME:-cabapp}
+      DB_PORT: 5432
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production-super-secret}
+      GIN_MODE: ${GIN_MODE:-release}
+      UPI_ID: ${UPI_ID:-ascab@upi}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - ascab_network
+    volumes:
+      - uploads:/app/uploads
+
+  # ─── Nginx Reverse Proxy (Production) ────────────────────────────────────
+  nginx:
+    image: nginx:alpine
+    container_name: ascab_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+    depends_on:
+      - app
+    networks:
+      - ascab_network
+    profiles:
+      - production
+
+volumes:
+  postgres_data:
+  uploads:
+
+networks:
+  ascab_network:
+    driver: bridge

@@ -1,0 +1,62 @@
+{
+  "appName": "AS Cab",
+  "welcome": "Welcome to AS Cab",
+  "login": "Login",
+  "signup": "Sign Up",
+  "mobile": "Mobile Number",
+  "name": "Full Name",
+  "otp": "Enter OTP",
+  "sendOtp": "Send OTP",
+  "verifyOtp": "Verify OTP",
+  "logout": "Logout",
+
+  "home": "Home",
+  "bookings": "My Bookings",
+  "chat": "Chat",
+  "profile": "Profile",
+
+  "bookRide": "Book a Ride",
+  "pickupLocation": "Pickup Location",
+  "dropLocation": "Drop Location",
+  "startDate": "Start Date & Time",
+  "endDate": "End Date & Time",
+  "passengers": "Number of Passengers",
+  "selectVehicle": "Select Vehicle",
+  "fiveSeater": "5 Seater",
+  "sevenSeater": "7 Seater",
+  "submitBooking": "Submit Booking",
+
+  "bookingStatus": "Booking Status",
+  "pending": "Pending",
+  "confirmed": "Confirmed",
+  "completed": "Completed",
+  "cancelled": "Cancelled",
+
+  "payment": "Payment",
+  "cash": "Cash",
+  "upi": "UPI",
+  "payNow": "Pay Now",
+  "uploadScreenshot": "Upload Screenshot",
+
+  "callDriver": "Call Driver",
+  "chatWithDriver": "Chat with Driver",
+  "sendMessage": "Send Message",
+
+  "dashboard": "Dashboard",
+  "totalBookings": "Total Bookings",
+  "revenue": "Revenue",
+  "manageBookings": "Manage Bookings",
+  "manageDrivers": "Manage Drivers",
+  "manageVehicles": "Manage Vehicles",
+
+  "assignDriver": "Assign Driver",
+  "verifyPayment": "Verify Payment",
+  "exportReport": "Export Report",
+
+  "error": "Error",
+  "success": "Success",
+  "cancel": "Cancel",
+  "save": "Save",
+  "back": "Back",
+  "loading": "Loading..."
+}

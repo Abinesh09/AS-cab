@@ -1,0 +1,51 @@
+{
+  "appName": "AS Cab",
+  "welcome": "AS Cab-க்கு வரவேற்கிறோம்",
+  "login": "உள்நுழைய",
+  "signup": "பதிவு செய்க",
+  "mobile": "கைபேசி எண்",
+  "name": "முழு பெயர்",
+  "otp": "OTP உள்ளிடுக",
+  "sendOtp": "OTP அனுப்பு",
+  "verifyOtp": "OTP சரிபார்",
+  "logout": "வெளியேறு",
+
+  "home": "முகப்பு",
+  "bookings": "என் பதிவுகள்",
+  "chat": "அரட்டை",
+  "profile": "சுயவிவரம்",
+
+  "bookRide": "பயண முன்பதிவு",
+  "pickupLocation": "எடுக்கும் இடம்",
+  "dropLocation": "விடும் இடம்",
+  "startDate": "தொடக்க தேதி & நேரம்",
+  "endDate": "முடிவு தேதி & நேரம்",
+  "passengers": "பயணிகள் எண்ணிக்கை",
+  "selectVehicle": "வாகனம் தேர்ந்தெடு",
+  "fiveSeater": "5 இருக்கை",
+  "sevenSeater": "7 இருக்கை",
+  "submitBooking": "முன்பதிவு சமர்ப்பி",
+
+  "bookingStatus": "முன்பதிவு நிலை",
+  "pending": "நிலுவையில்",
+  "confirmed": "உறுதிப்படுத்தப்பட்டது",
+  "completed": "முடிந்தது",
+  "cancelled": "ரத்து செய்யப்பட்டது",
+
+  "payment": "கட்டணம்",
+  "cash": "பணம்",
+  "upi": "UPI",
+  "payNow": "இப்போது செலுத்து",
+  "uploadScreenshot": "ஸ்கிரீன்ஷாட் பதிவேற்று",
+
+  "callDriver": "டிரைவரை அழைக்க",
+  "chatWithDriver": "டிரைவருடன் அரட்டை",
+  "sendMessage": "செய்தி அனுப்பு",
+
+  "error": "பிழை",
+  "success": "வெற்றி",
+  "cancel": "ரத்து",
+  "save": "சேமி",
+  "back": "பின்செல்",
+  "loading": "ஏற்றுகிறது..."
+}

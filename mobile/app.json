@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "AS Cab",
+    "slug": "ascab-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.anonymous.ascabapp"
+    }
+  }
+}

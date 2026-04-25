@@ -1,0 +1,51 @@
+{
+  "appName": "AS Cab",
+  "welcome": "AS Cab-ku vanga!",
+  "login": "Login pannunga",
+  "signup": "Register pannunga",
+  "mobile": "Mobile Number",
+  "name": "Ungal Peyar",
+  "otp": "OTP enter pannunga",
+  "sendOtp": "OTP anuppu",
+  "verifyOtp": "OTP verify pannunga",
+  "logout": "Logout",
+
+  "home": "Home",
+  "bookings": "En Bookings",
+  "chat": "Chat",
+  "profile": "Profile",
+
+  "bookRide": "Ride Book Pannu",
+  "pickupLocation": "Pickup Idham",
+  "dropLocation": "Drop Idham",
+  "startDate": "Start Date & Time",
+  "endDate": "End Date & Time",
+  "passengers": "Passenger count",
+  "selectVehicle": "Vehicle select pannu",
+  "fiveSeater": "5 Seat",
+  "sevenSeater": "7 Seat",
+  "submitBooking": "Booking submit pannu",
+
+  "bookingStatus": "Booking Status",
+  "pending": "Pending-la iruku",
+  "confirmed": "Confirm aagiruchi",
+  "completed": "Mudinjuchu",
+  "cancelled": "Cancel pannirukanga",
+
+  "payment": "Payment",
+  "cash": "Cash",
+  "upi": "UPI",
+  "payNow": "Ippo pay pannu",
+  "uploadScreenshot": "Screenshot upload pannu",
+
+  "callDriver": "Driver-ku call pannu",
+  "chatWithDriver": "Driver kita chat pannu",
+  "sendMessage": "Message anuppu",
+
+  "error": "Thappu",
+  "success": "Sariya aagiruchi",
+  "cancel": "Cancel",
+  "save": "Save pannu",
+  "back": "Thirumbu po",
+  "loading": "Loadaaguthu..."
+}
