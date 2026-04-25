@@ -13,6 +13,11 @@
     },
     "android": {
       "package": "com.anonymous.ascabapp"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f2e82675-85bf-4888-b7bb-6d90c9c84136"
+      }
     }
   }
 }
