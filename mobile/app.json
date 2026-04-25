@@ -15,6 +15,12 @@
     "android": {
       "package": "com.anonymous.ascabapp"
     },
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
     "plugins": [
       [
         "expo-build-properties",
@@ -32,9 +38,6 @@
       "eas": {
         "projectId": "f2e82675-85bf-4888-b7bb-6d90c9c84136"
       }
-    },
-    "plugins": [
-      "expo-build-properties"
-    ]
+    }
   }
 }
