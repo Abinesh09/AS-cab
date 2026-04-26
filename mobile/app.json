@@ -3,6 +3,7 @@
     "name": "AS Cab",
     "slug": "ascab-app",
     "version": "1.0.0",
+    "scheme": "ascabapp",
     "sdkVersion": "51.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
