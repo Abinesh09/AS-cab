@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useDispatch, useSelector } from 'react-redux';
 import { Text, View, TouchableOpacity } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { AppDispatch, RootState } from '../store/store';
 import { loadStoredAuth, logout } from '../store/slices/authSlice';
@@ -42,6 +43,7 @@ const tabBarStyle = {
 
 // User Bottom Tabs
 function UserTabs() {
+  const { t } = useTranslation();
   return (
     <Tab.Navigator
       screenOptions={{
@@ -55,13 +57,16 @@ function UserTabs() {
       <Tab.Screen
         name="Home"
         component={HomeScreen}
-        options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 22, color }}>🏠</Text> }}
+        options={{ 
+          tabBarLabel: t('home'),
+          tabBarIcon: ({ color }) => <Text style={{ fontSize: 22, color }}>🏠</Text> 
+        }}
       />
       <Tab.Screen
         name="BookRide"
         component={BookRideScreen}
         options={{
-          tabBarLabel: 'Book',
+          tabBarLabel: t('bookRide'),
           tabBarIcon: ({ color }) => <Text style={{ fontSize: 22, color }}>🚖</Text>,
         }}
       />
@@ -69,14 +74,17 @@ function UserTabs() {
         name="Bookings"
         component={BookingsListScreen}
         options={{
-          tabBarLabel: 'My Trips',
+          tabBarLabel: t('myTrips'),
           tabBarIcon: ({ color }) => <Text style={{ fontSize: 22, color }}>📋</Text>,
         }}
       />
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
-        options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 22, color }}>👤</Text> }}
+        options={{ 
+          tabBarLabel: t('profile'),
+          tabBarIcon: ({ color }) => <Text style={{ fontSize: 22, color }}>👤</Text> 
+        }}
       />
     </Tab.Navigator>
   );
@@ -84,6 +92,7 @@ function UserTabs() {
 
 // Admin Bottom Tabs
 function AdminTabs() {
+  const { t } = useTranslation();
   return (
     <Tab.Navigator
       screenOptions={{
@@ -129,7 +138,10 @@ function AdminTabs() {
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
-        options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 22, color }}>👤</Text> }}
+        options={{ 
+          tabBarLabel: t('profile'),
+          tabBarIcon: ({ color }) => <Text style={{ fontSize: 22, color }}>👤</Text> 
+        }}
       />
     </Tab.Navigator>
   );
@@ -137,6 +149,7 @@ function AdminTabs() {
 
 // Driver Bottom Tabs
 function DriverTabs() {
+  const { t } = useTranslation();
   return (
     <Tab.Navigator
       screenOptions={{
@@ -157,7 +170,10 @@ function DriverTabs() {
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
-        options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 22, color }}>👤</Text> }}
+        options={{ 
+          tabBarLabel: t('profile'),
+          tabBarIcon: ({ color }) => <Text style={{ fontSize: 22, color }}>👤</Text> 
+        }}
       />
     </Tab.Navigator>
   );

@@ -4,6 +4,7 @@ import {
   ActivityIndicator, Alert, Modal, FlatList,
 } from 'react-native';
 import { adminService } from '../../services/apiService';
+import { useTranslation } from 'react-i18next';
 
 const STATUS_CONFIG: any = {
   pending:   { color: '#F59E0B', bg: '#451A03' },
@@ -13,6 +14,7 @@ const STATUS_CONFIG: any = {
 };
 
 export default function AdminBookingsScreen({ navigation }: any) {
+  const { t } = useTranslation();
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('');
@@ -26,11 +28,10 @@ export default function AdminBookingsScreen({ navigation }: any) {
   }, [filter]);
 
   const fetchBookings = async () => {
-    setLoading(true);
     try {
       const res = await adminService.getAllBookings(filter || undefined);
       setBookings(res.data.bookings ?? []);
-    } catch { Alert.alert('Error', 'Failed to load bookings'); }
+    } catch { Alert.alert(t('error'), t('loadingError')); }
     finally { setLoading(false); }
   };
 
@@ -45,11 +46,11 @@ export default function AdminBookingsScreen({ navigation }: any) {
     if (!selectedBooking) return;
     try {
       await adminService.assignDriver(selectedBooking.id, driverId);
-      Alert.alert('✅ Success', 'Driver assigned and booking confirmed');
+      Alert.alert(`✅ ${t('success')}`, t('assignmentSuccess'));
       setAssignModal(false);
       fetchBookings();
     } catch (err: any) {
-      Alert.alert('Error', err.response?.data?.error ?? 'Assignment failed');
+      Alert.alert(t('error'), err.response?.data?.error ?? t('error'));
     }
   };
 
@@ -57,7 +58,7 @@ export default function AdminBookingsScreen({ navigation }: any) {
     try {
       await adminService.updateBookingStatus(bookingId, status);
       fetchBookings();
-    } catch { Alert.alert('Error', 'Failed to update status'); }
+    } catch { Alert.alert(t('error'), t('error')); }
   };
 
   const filters = ['', 'pending', 'confirmed', 'completed'];
@@ -66,9 +67,9 @@ export default function AdminBookingsScreen({ navigation }: any) {
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.back}>← Back</Text>
+          <Text style={styles.back}>← {t('back')}</Text>
         </TouchableOpacity>
-        <Text style={styles.title}>Manage Bookings</Text>
+        <Text style={styles.title}>{t('manageBookings')}</Text>
         <View style={{ width: 50 }} />
       </View>
 
@@ -81,7 +82,7 @@ export default function AdminBookingsScreen({ navigation }: any) {
             onPress={() => setFilter(f)}
           >
             <Text style={[styles.filterText, filter === f && styles.filterTextActive]}>
-              {f ? f.charAt(0).toUpperCase() + f.slice(1) : 'All'}
+              {f ? t(f) : t('all')}
             </Text>
           </TouchableOpacity>
         ))}
@@ -100,17 +101,16 @@ export default function AdminBookingsScreen({ navigation }: any) {
               <View style={styles.card}>
                 <View style={styles.cardHeader}>
                   <View>
-                    <Text style={styles.bookingId}>Booking #{item.id}</Text>
+                    <Text style={styles.bookingId}>{t('booking')} #{item.id}</Text>
                     <Text style={styles.userName}>{item.user?.name} · {item.user?.mobile}</Text>
                   </View>
                   <View style={[styles.statusBadge, { backgroundColor: sc.bg }]}>
-                    <Text style={[styles.statusText, { color: sc.color }]}>{item.status}</Text>
+                    <Text style={[styles.statusText, { color: sc.color }]}>{t(item.status)}</Text>
                   </View>
                 </View>
 
                 <View style={styles.divider} />
-
-                <Text style={styles.detailText}>🚗 {item.vehicle?.name} ({item.vehicle?.seat_type} Seat)</Text>
+                <Text style={styles.detailText}>🚗 {item.vehicle?.name} ({item.vehicle?.seat_type} {t('seater')})</Text>
                 <Text style={styles.detailText} numberOfLines={1}>📍 {item.pickup_location}</Text>
                 <Text style={styles.detailText} numberOfLines={1}>🏁 {item.drop_location}</Text>
                 <Text style={styles.detailText}>
@@ -128,7 +128,7 @@ export default function AdminBookingsScreen({ navigation }: any) {
                       style={styles.actionBtn}
                       onPress={() => { setSelectedBooking(item); setAssignModal(true); }}
                     >
-                      <Text style={styles.actionBtnText}>Assign Driver</Text>
+                      <Text style={styles.actionBtnText}>{t('assignDriver')}</Text>
                     </TouchableOpacity>
                   )}
                   {item.status === 'confirmed' && (
@@ -136,7 +136,7 @@ export default function AdminBookingsScreen({ navigation }: any) {
                       style={[styles.actionBtn, { backgroundColor: '#1E1B4B' }]}
                       onPress={() => handleStatusChange(item.id, 'completed')}
                     >
-                      <Text style={[styles.actionBtnText, { color: '#818CF8' }]}>Mark Completed</Text>
+                      <Text style={[styles.actionBtnText, { color: '#818CF8' }]}>{t('markCompleted')}</Text>
                     </TouchableOpacity>
                   )}
                   <TouchableOpacity
@@ -151,7 +151,7 @@ export default function AdminBookingsScreen({ navigation }: any) {
           }}
           ListEmptyComponent={
             <View style={styles.empty}>
-              <Text style={styles.emptyText}>No bookings found</Text>
+              <Text style={styles.emptyText}>{t('noBookingsFound')}</Text>
             </View>
           }
         />
@@ -161,7 +161,7 @@ export default function AdminBookingsScreen({ navigation }: any) {
       <Modal visible={assignModal} transparent animationType="slide">
         <View style={styles.modalOverlay}>
           <View style={styles.modal}>
-            <Text style={styles.modalTitle}>Select Driver</Text>
+            <Text style={styles.modalTitle}>{t('selectDriver')}</Text>
             <FlatList
               data={drivers}
               keyExtractor={(d) => String(d.id)}
@@ -176,7 +176,7 @@ export default function AdminBookingsScreen({ navigation }: any) {
               )}
             />
             <TouchableOpacity style={styles.closeModal} onPress={() => setAssignModal(false)}>
-              <Text style={styles.closeModalText}>Cancel</Text>
+              <Text style={styles.closeModalText}>{t('cancel')}</Text>
             </TouchableOpacity>
           </View>
         </View>

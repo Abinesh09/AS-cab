@@ -5,8 +5,10 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { adminService, vehicleService } from '../../services/apiService';
+import { useTranslation } from 'react-i18next';
 
 export default function AdminVehiclesScreen() {
+  const { t } = useTranslation();
   const [vehicles, setVehicles] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
@@ -31,7 +33,7 @@ export default function AdminVehiclesScreen() {
         const res2 = await vehicleService.getAll();
         setVehicles(res2.data.vehicles || []);
       } catch (err2) {
-        Alert.alert('Error', 'Failed to load vehicles');
+        Alert.alert(t('error'), t('loadingError'));
       }
     } finally {
       setIsLoading(false);
@@ -44,7 +46,7 @@ export default function AdminVehiclesScreen() {
 
   const handleAddVehicle = async () => {
     if (!name || !price) {
-      Alert.alert('Error', 'Please fill name and price');
+      Alert.alert(t('error'), t('fillNamePrice'));
       return;
     }
 
@@ -58,13 +60,13 @@ export default function AdminVehiclesScreen() {
         description
       });
       
-      Alert.alert('Success', 'Car details added successfully');
+      Alert.alert(t('success'), t('carAddedSuccess'));
       setModalVisible(false);
       resetForm();
       loadVehicles();
     } catch (err: any) {
       console.error('Add vehicle error:', err);
-      Alert.alert('Error', err.response?.data?.error || 'Failed to add vehicle');
+      Alert.alert(t('error'), err.response?.data?.error || t('error'));
     } finally {
       setIsSubmitting(false);
     }
@@ -83,7 +85,7 @@ export default function AdminVehiclesScreen() {
       <View style={styles.cardHeader}>
         <Text style={styles.carName}>{item.name}</Text>
         <View style={styles.seatBadge}>
-          <Text style={styles.seatText}>{item.seat_type} Seater</Text>
+          <Text style={styles.seatText}>{item.seat_type} {t('seater')}</Text>
         </View>
       </View>
       <Text style={styles.carDesc}>{item.description || 'No description provided'}</Text>
@@ -97,9 +99,9 @@ export default function AdminVehiclesScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Car Fleet</Text>
+        <Text style={styles.headerTitle}>{t('carFleet')}</Text>
         <TouchableOpacity style={styles.addBtn} onPress={() => setModalVisible(true)}>
-          <Text style={styles.addBtnText}>+ Add Car</Text>
+          <Text style={styles.addBtnText}>+ {t('addCar')}</Text>
         </TouchableOpacity>
       </View>
 
@@ -107,7 +109,7 @@ export default function AdminVehiclesScreen() {
         <ActivityIndicator style={{ flex: 1 }} color="#F59E0B" size="large" />
       ) : vehicles.length === 0 ? (
         <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>No cars added yet.</Text>
+          <Text style={styles.emptyText}>{t('noCarsAdded')}</Text>
         </View>
       ) : (
         <FlatList
@@ -126,14 +128,14 @@ export default function AdminVehiclesScreen() {
         >
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Add New Car</Text>
+              <Text style={styles.modalTitle}>{t('addNewCar')}</Text>
               <TouchableOpacity onPress={() => { setModalVisible(false); resetForm(); }}>
                 <Text style={styles.closeBtn}>✕</Text>
               </TouchableOpacity>
             </View>
 
             <ScrollView showsVerticalScrollIndicator={false}>
-              <Text style={styles.label}>Car Model Name</Text>
+              <Text style={styles.label}>{t('carModelName')}</Text>
               <TextInput
                 style={styles.input}
                 placeholder="e.g. Innova Crysta, Swift Dzire"
@@ -142,24 +144,24 @@ export default function AdminVehiclesScreen() {
                 onChangeText={setName}
               />
 
-              <Text style={styles.label}>Seat Capacity</Text>
+              <Text style={styles.label}>{t('seatCapacity')}</Text>
               <View style={styles.row}>
                 <TouchableOpacity 
                   style={[styles.radioBtn, seatType === '5' && styles.radioActive]}
                   onPress={() => setSeatType('5')}
                 >
-                  <Text style={[styles.radioText, seatType === '5' && styles.radioTextActive]}>5 Seater</Text>
+                  <Text style={[styles.radioText, seatType === '5' && styles.radioTextActive]}>5 {t('seater')}</Text>
                 </TouchableOpacity>
                 <View style={{ width: 12 }} />
                 <TouchableOpacity 
                   style={[styles.radioBtn, seatType === '7' && styles.radioActive]}
                   onPress={() => setSeatType('7')}
                 >
-                  <Text style={[styles.radioText, seatType === '7' && styles.radioTextActive]}>7 Seater</Text>
+                  <Text style={[styles.radioText, seatType === '7' && styles.radioTextActive]}>7 {t('seater')}</Text>
                 </TouchableOpacity>
               </View>
 
-              <Text style={styles.label}>Base Price (₹)</Text>
+              <Text style={styles.label}>{t('basePrice')} (₹)</Text>
               <TextInput
                 style={styles.input}
                 placeholder="e.g. 15"
@@ -169,24 +171,24 @@ export default function AdminVehiclesScreen() {
                 onChangeText={setPrice}
               />
 
-              <Text style={styles.label}>Pricing Type</Text>
+              <Text style={styles.label}>{t('pricingType')}</Text>
               <View style={styles.row}>
                 <TouchableOpacity 
                   style={[styles.radioBtn, pricingType === 'per_km' && styles.radioActive]}
                   onPress={() => setPricingType('per_km')}
                 >
-                  <Text style={[styles.radioText, pricingType === 'per_km' && styles.radioTextActive]}>Per KM</Text>
+                  <Text style={[styles.radioText, pricingType === 'per_km' && styles.radioTextActive]}>{t('perKm')}</Text>
                 </TouchableOpacity>
                 <View style={{ width: 12 }} />
                 <TouchableOpacity 
                   style={[styles.radioBtn, pricingType === 'flat_rate' && styles.radioActive]}
                   onPress={() => setPricingType('flat_rate')}
                 >
-                  <Text style={[styles.radioText, pricingType === 'flat_rate' && styles.radioTextActive]}>Flat Rate</Text>
+                  <Text style={[styles.radioText, pricingType === 'flat_rate' && styles.radioTextActive]}>{t('flatRate')}</Text>
                 </TouchableOpacity>
               </View>
 
-              <Text style={styles.label}>Description (Optional)</Text>
+              <Text style={styles.label}>{t('description')} (Optional)</Text>
               <TextInput
                 style={[styles.input, { height: 80, textAlignVertical: 'top' }]}
                 placeholder="e.g. AC, Premium, Extra Luggage"
@@ -204,7 +206,7 @@ export default function AdminVehiclesScreen() {
                 {isSubmitting ? (
                   <ActivityIndicator color="#0F172A" />
                 ) : (
-                  <Text style={styles.submitBtnText}>Save Car Details</Text>
+                  <Text style={styles.submitBtnText}>{t('saveCarDetails')}</Text>
                 )}
               </TouchableOpacity>
               <View style={{ height: 20 }} />

@@ -3,8 +3,10 @@ import { View, Text, StyleSheet, FlatList, ActivityIndicator, Alert, TouchableOp
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { driverService } from '../../services/apiService';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 export default function DriverHomeScreen() {
+  const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const [bookings, setBookings] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -16,7 +18,7 @@ export default function DriverHomeScreen() {
       setBookings(res.data.bookings || []);
     } catch (err) {
       console.error('Failed to load driver bookings:', err);
-      Alert.alert('Error', 'Failed to load your trips');
+      Alert.alert(t('error'), t('loadingError'));
     } finally {
       setIsLoading(false);
     }
@@ -41,7 +43,7 @@ export default function DriverHomeScreen() {
         <Text style={styles.tripId}>Trip #{item.id}</Text>
         <View style={[styles.statusBadge, item.status === 'completed' && styles.statusCompleted]}>
           <Text style={[styles.statusText, item.status === 'completed' && {color: '#10B981'}]}>
-            {item.status.toUpperCase()}
+            {t(item.status)}
           </Text>
         </View>
       </View>
@@ -69,7 +71,7 @@ export default function DriverHomeScreen() {
       </View>
       
       {item.status === 'confirmed' && (
-        <Text style={styles.chatHint}>Tap to view details & chat with customer</Text>
+        <Text style={styles.chatHint}>{t('chatHint')}</Text>
       )}
     </TouchableOpacity>
   );
@@ -77,27 +79,27 @@ export default function DriverHomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Driver Dashboard</Text>
+        <Text style={styles.headerTitle}>{t('adminDashboard')}</Text>
       </View>
 
       <View style={styles.statsRow}>
         <View style={styles.statBox}>
           <Text style={styles.statValue}>{activeBookings.length}</Text>
-          <Text style={styles.statLabel}>Active Trips</Text>
+          <Text style={styles.statLabel}>{t('activeTrips')}</Text>
         </View>
         <View style={styles.statBox}>
           <Text style={styles.statValue}>{completedBookings.length}</Text>
-          <Text style={styles.statLabel}>Completed</Text>
+          <Text style={styles.statLabel}>{t('completed')}</Text>
         </View>
       </View>
 
-      <Text style={styles.sectionTitle}>Your Assigned Trips</Text>
+      <Text style={styles.sectionTitle}>{t('assignedTrips')}</Text>
 
       {isLoading ? (
         <ActivityIndicator style={{ flex: 1 }} color="#F59E0B" size="large" />
       ) : bookings.length === 0 ? (
         <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>No trips assigned yet.</Text>
+          <Text style={styles.emptyText}>{t('noTripsAssigned')}</Text>
         </View>
       ) : (
         <FlatList

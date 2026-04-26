@@ -5,8 +5,10 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { adminService } from '../../services/apiService';
+import { useTranslation } from 'react-i18next';
 
 export default function AdminDriversScreen() {
+  const { t } = useTranslation();
   const [drivers, setDrivers] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
@@ -24,7 +26,7 @@ export default function AdminDriversScreen() {
       setDrivers(res.data.drivers || []);
     } catch (err) {
       console.error('Failed to load drivers:', err);
-      Alert.alert('Error', 'Failed to load drivers');
+      Alert.alert(t('error'), t('loadingError'));
     } finally {
       setIsLoading(false);
     }
@@ -36,7 +38,7 @@ export default function AdminDriversScreen() {
 
   const handleAddDriver = async () => {
     if (!name || !phone) {
-      Alert.alert('Error', 'Please fill name and phone number');
+      Alert.alert(t('error'), t('fillRequiredFields'));
       return;
     }
 
@@ -48,13 +50,13 @@ export default function AdminDriversScreen() {
         license_no: licenseNo,
       });
       
-      Alert.alert('Success', 'Driver added successfully. Default login OTP is 000000');
+      Alert.alert(t('success'), t('driverAddedSuccess'));
       setModalVisible(false);
       resetForm();
       loadDrivers();
     } catch (err: any) {
       console.error('Add driver error:', err);
-      Alert.alert('Error', err.response?.data?.error || 'Failed to add driver');
+      Alert.alert(t('error'), err.response?.data?.error || t('error'));
     } finally {
       setIsSubmitting(false);
     }
@@ -78,7 +80,7 @@ export default function AdminDriversScreen() {
         </View>
       </View>
       <View style={styles.cardFooter}>
-        <Text style={styles.licenseLabel}>License:</Text>
+        <Text style={styles.licenseLabel}>{t('license')}:</Text>
         <Text style={styles.licenseValue}>{item.license_no || 'Not provided'}</Text>
       </View>
     </View>
@@ -87,9 +89,9 @@ export default function AdminDriversScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Driver Fleet</Text>
+        <Text style={styles.headerTitle}>{t('driverFleet')}</Text>
         <TouchableOpacity style={styles.addBtn} onPress={() => setModalVisible(true)}>
-          <Text style={styles.addBtnText}>+ Add Driver</Text>
+          <Text style={styles.addBtnText}>+ {t('addDriver')}</Text>
         </TouchableOpacity>
       </View>
 
@@ -97,7 +99,7 @@ export default function AdminDriversScreen() {
         <ActivityIndicator style={{ flex: 1 }} color="#F59E0B" size="large" />
       ) : drivers.length === 0 ? (
         <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>No drivers added yet.</Text>
+          <Text style={styles.emptyText}>{t('noDriversAdded')}</Text>
         </View>
       ) : (
         <FlatList
@@ -117,14 +119,14 @@ export default function AdminDriversScreen() {
         >
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Add New Driver</Text>
+              <Text style={styles.modalTitle}>{t('addNewDriver')}</Text>
               <TouchableOpacity onPress={() => { setModalVisible(false); resetForm(); }}>
                 <Text style={styles.closeBtn}>✕</Text>
               </TouchableOpacity>
             </View>
 
             <ScrollView showsVerticalScrollIndicator={false}>
-              <Text style={styles.label}>Full Name</Text>
+              <Text style={styles.label}>{t('name')}</Text>
               <TextInput
                 style={styles.input}
                 placeholder="e.g. Ramesh Kumar"
@@ -133,7 +135,7 @@ export default function AdminDriversScreen() {
                 onChangeText={setName}
               />
 
-              <Text style={styles.label}>Mobile Number</Text>
+              <Text style={styles.label}>{t('mobile')}</Text>
               <TextInput
                 style={styles.input}
                 placeholder="e.g. 9876543210"
@@ -143,7 +145,7 @@ export default function AdminDriversScreen() {
                 onChangeText={setPhone}
               />
 
-              <Text style={styles.label}>License Number (Optional)</Text>
+              <Text style={styles.label}>{t('license')} (Optional)</Text>
               <TextInput
                 style={styles.input}
                 placeholder="e.g. TN00 20240000000"
@@ -161,7 +163,7 @@ export default function AdminDriversScreen() {
                 {isSubmitting ? (
                   <ActivityIndicator color="#0F172A" />
                 ) : (
-                  <Text style={styles.submitBtnText}>Create Driver Account</Text>
+                  <Text style={styles.submitBtnText}>{t('createDriverAccount')}</Text>
                 )}
               </TouchableOpacity>
               <View style={{ height: 20 }} />

@@ -171,7 +171,7 @@ func AdminCreateDriver(c *fiber.Ctx) error {
 	}
 
 	// Create a user account for driver
-	otp := "000000"
+	otp := "123456"
 	user := models.User{
 		Name:   body.Name,
 		Mobile: body.Phone,

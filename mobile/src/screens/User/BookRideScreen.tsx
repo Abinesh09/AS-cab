@@ -4,6 +4,7 @@ import {
   StyleSheet, ActivityIndicator, Alert, Platform,
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
+import { useTranslation } from 'react-i18next';
 import { vehicleService, bookingService } from '../../services/apiService';
 
 interface Vehicle {
@@ -16,6 +17,7 @@ interface Vehicle {
 }
 
 export default function BookRideScreen({ navigation }: any) {
+  const { t } = useTranslation();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [selectedSeatType, setSelectedSeatType] = useState<'5' | '7' | ''>('');
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
@@ -45,7 +47,7 @@ export default function BookRideScreen({ navigation }: any) {
       setVehicles(res.data.vehicles ?? []);
       setSelectedVehicle(null);
     } catch {
-      Alert.alert('Error', 'Failed to load vehicles');
+      Alert.alert(t('error'), t('loadingError'));
     } finally {
       setVehicleLoading(false);
     }
@@ -53,7 +55,7 @@ export default function BookRideScreen({ navigation }: any) {
 
   const handleSubmit = async () => {
     if (!selectedVehicle || !pickup || !drop || !passengers) {
-      Alert.alert('Error', 'Please fill all required fields');
+      Alert.alert(t('error'), t('fillRequiredFields'));
       return;
     }
 
@@ -61,7 +63,7 @@ export default function BookRideScreen({ navigation }: any) {
     const endISO = endDate.toISOString();
 
     if (endDate <= startDate) {
-      Alert.alert('Error', 'End time must be after start time');
+      Alert.alert(t('error'), t('endTimeError'));
       return;
     }
 
@@ -76,11 +78,11 @@ export default function BookRideScreen({ navigation }: any) {
         passengers: parseInt(passengers, 10),
         notes,
       });
-      Alert.alert('🎉 Success', 'Booking submitted! Admin will confirm shortly.', [
-        { text: 'View Bookings', onPress: () => navigation.navigate('Bookings') },
+      Alert.alert(`🎉 ${t('bookingSuccessTitle')}`, t('bookingSuccessMsg'), [
+        { text: t('viewBookings'), onPress: () => navigation.navigate('Bookings') },
       ]);
     } catch (err: any) {
-      Alert.alert('Error', err.response?.data?.error ?? 'Failed to create booking');
+      Alert.alert(t('error'), err.response?.data?.error ?? t('bookingFailed'));
     } finally {
       setLoading(false);
     }
@@ -95,15 +97,15 @@ export default function BookRideScreen({ navigation }: any) {
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.back}>← Back</Text>
+          <Text style={styles.back}>← {t('back')}</Text>
         </TouchableOpacity>
-        <Text style={styles.title}>Book a Ride</Text>
+        <Text style={styles.title}>{t('bookRide')}</Text>
         <View style={{ width: 50 }} />
       </View>
 
       {/* Step 1: Seat Type */}
       <View style={styles.section}>
-        <Text style={styles.stepLabel}>STEP 1 — Select Seat Type</Text>
+        <Text style={styles.stepLabel}>{t('step1')}</Text>
         <View style={styles.seatRow}>
           {(['5', '7'] as const).map((st) => (
             <TouchableOpacity
@@ -114,7 +116,7 @@ export default function BookRideScreen({ navigation }: any) {
             >
               <Text style={styles.seatIcon}>{st === '5' ? '🚗' : '🚐'}</Text>
               <Text style={[styles.seatText, selectedSeatType === st && styles.seatTextActive]}>
-                {st} Seater
+                {st} {t('seater')}
               </Text>
             </TouchableOpacity>
           ))}
@@ -124,11 +126,11 @@ export default function BookRideScreen({ navigation }: any) {
       {/* Step 2: Vehicle Selection */}
       {selectedSeatType ? (
         <View style={styles.section}>
-          <Text style={styles.stepLabel}>STEP 2 — Select Vehicle</Text>
+          <Text style={styles.stepLabel}>{t('step2')}</Text>
           {vehicleLoading ? (
             <ActivityIndicator color="#F59E0B" />
           ) : vehicles.length === 0 ? (
-            <Text style={styles.noVehicles}>No vehicles available</Text>
+            <Text style={styles.noVehicles}>{t('noVehiclesAvailable')}</Text>
           ) : (
             vehicles.map((v) => (
               <TouchableOpacity
@@ -159,31 +161,28 @@ export default function BookRideScreen({ navigation }: any) {
       {/* Step 3: Trip Details */}
       {selectedVehicle ? (
         <View style={styles.section}>
-          <Text style={styles.stepLabel}>STEP 3 — Trip Details</Text>
-
-          <Text style={styles.label}>Pickup Location *</Text>
+          <Text style={styles.stepLabel}>{t('step3')}</Text>
+          <Text style={styles.label}>{t('pickupLocationLabel')}</Text>
           <TextInput
             style={styles.input}
-            placeholder="Enter pickup address or Google Maps link"
+            placeholder={t('pickupPlaceholder')}
             placeholderTextColor="#475569"
             value={pickup}
             onChangeText={setPickup}
             multiline
           />
-
-          <Text style={styles.label}>Drop Location *</Text>
+          <Text style={styles.label}>{t('dropLocationLabel')}</Text>
           <TextInput
             style={styles.input}
-            placeholder="Enter drop address or Google Maps link"
+            placeholder={t('dropPlaceholder')}
             placeholderTextColor="#475569"
             value={drop}
             onChangeText={setDrop}
             multiline
           />
-
           <View style={styles.row}>
             <View style={{ flex: 1, marginRight: 8 }}>
-              <Text style={styles.label}>Start Date & Time *</Text>
+              <Text style={styles.label}>{t('startDateTimeLabel')}</Text>
               <TouchableOpacity style={styles.datePickerBtn} onPress={() => setOpenStart(true)}>
                 <Text style={styles.datePickerText}>
                   {startDate.toLocaleString([], { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
@@ -191,7 +190,7 @@ export default function BookRideScreen({ navigation }: any) {
               </TouchableOpacity>
             </View>
             <View style={{ flex: 1 }}>
-              <Text style={styles.label}>End Date & Time *</Text>
+              <Text style={styles.label}>{t('endDateTimeLabel')}</Text>
               <TouchableOpacity style={styles.datePickerBtn} onPress={() => setOpenEnd(true)}>
                 <Text style={styles.datePickerText}>
                   {endDate.toLocaleString([], { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
@@ -233,10 +232,10 @@ export default function BookRideScreen({ navigation }: any) {
             }}
           />
 
-          <Text style={styles.label}>Passengers *</Text>
+          <Text style={styles.label}>{t('passengersLabel')}</Text>
           <TextInput
             style={styles.input}
-            placeholder={`Max ${selectedVehicle.seat_type}`}
+            placeholder={`${t('passengersPlaceholder')} ${selectedVehicle.seat_type}`}
             placeholderTextColor="#475569"
             value={passengers}
             onChangeText={setPassengers}
@@ -244,10 +243,10 @@ export default function BookRideScreen({ navigation }: any) {
             maxLength={1}
           />
 
-          <Text style={styles.label}>Notes (optional)</Text>
+          <Text style={styles.label}>{t('notesLabel')}</Text>
           <TextInput
             style={[styles.input, { height: 80 }]}
-            placeholder="Any special requirements..."
+            placeholder={t('notesPlaceholder')}
             placeholderTextColor="#475569"
             value={notes}
             onChangeText={setNotes}
@@ -256,7 +255,7 @@ export default function BookRideScreen({ navigation }: any) {
 
           {/* Price Summary */}
           <View style={styles.priceSummary}>
-            <Text style={styles.priceSummaryTitle}>Estimated Price</Text>
+            <Text style={styles.priceSummaryTitle}>{t('estimatedPrice')}</Text>
             <Text style={styles.priceSummaryAmount}>
               ₹{selectedVehicle.price}
               <Text style={styles.priceSummaryType}> {pricingLabel(selectedVehicle.pricing_type)}</Text>
@@ -272,7 +271,7 @@ export default function BookRideScreen({ navigation }: any) {
             {loading ? (
               <ActivityIndicator color="#0F172A" />
             ) : (
-              <Text style={styles.submitBtnText}>🚖 Submit Booking</Text>
+              <Text style={styles.submitBtnText}>🚖 {t('submitBookingBtn')}</Text>
             )}
           </TouchableOpacity>
         </View>

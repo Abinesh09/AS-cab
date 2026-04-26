@@ -9,10 +9,10 @@ import { RootState } from '../../store/store';
 import { bookingService } from '../../services/apiService';
 
 const STATUS_CONFIG: any = {
-  pending: { color: '#F59E0B', bg: '#451A03', label: 'Pending' },
-  confirmed: { color: '#10B981', bg: '#022C22', label: 'Confirmed' },
-  completed: { color: '#6366F1', bg: '#1E1B4B', label: 'Completed' },
-  cancelled: { color: '#EF4444', bg: '#450A0A', label: 'Cancelled' },
+  pending: { color: '#F59E0B', bg: '#451A03', key: 'pending' },
+  confirmed: { color: '#10B981', bg: '#022C22', key: 'confirmed' },
+  completed: { color: '#6366F1', bg: '#1E1B4B', key: 'completed' },
+  cancelled: { color: '#EF4444', bg: '#450A0A', key: 'cancelled' },
 };
 
 export default function HomeScreen({ navigation }: any) {
@@ -38,9 +38,9 @@ export default function HomeScreen({ navigation }: any) {
 
   const greeting = () => {
     const h = new Date().getHours();
-    if (h < 12) return 'Good Morning';
-    if (h < 17) return 'Good Afternoon';
-    return 'Good Evening';
+    if (h < 12) return t('goodMorning');
+    if (h < 17) return t('goodAfternoon');
+    return t('goodEvening');
   };
 
   return (
@@ -52,7 +52,7 @@ export default function HomeScreen({ navigation }: any) {
       <View style={styles.header}>
         <View>
           <Text style={styles.greeting}>{greeting()}, 👋</Text>
-          <Text style={styles.username}>{user?.name ?? 'Traveller'}</Text>
+          <Text style={styles.username}>{user?.name ?? t('traveller')}</Text>
         </View>
         <TouchableOpacity
           style={styles.profileBtn}
@@ -69,10 +69,10 @@ export default function HomeScreen({ navigation }: any) {
         activeOpacity={0.9}
       >
         <View style={styles.bannerContent}>
-          <Text style={styles.bannerTitle}>Book Your Ride</Text>
-          <Text style={styles.bannerSub}>5 & 7 Seater vehicles available</Text>
+          <Text style={styles.bannerTitle}>{t('bookYourRide')}</Text>
+          <Text style={styles.bannerSub}>{t('vehiclesAvailable')}</Text>
           <View style={styles.bannerBtn}>
-            <Text style={styles.bannerBtnText}>Book Now →</Text>
+            <Text style={styles.bannerBtnText}>{t('bookNow')} →</Text>
           </View>
         </View>
         <Text style={styles.bannerEmoji}>🚖</Text>
@@ -80,13 +80,13 @@ export default function HomeScreen({ navigation }: any) {
 
       {/* Quick Actions */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Quick Actions</Text>
+        <Text style={styles.sectionTitle}>{t('quickActions')}</Text>
         <View style={styles.actionsGrid}>
           {[
-            { icon: '📋', label: 'My Bookings', screen: 'Bookings' },
-            { icon: '🚗', label: 'Vehicles', screen: 'BookRide' },
-            { icon: '💬', label: 'Support', screen: 'Bookings' },
-            { icon: '👤', label: 'Profile', screen: 'Profile' },
+            { icon: '📋', label: t('bookings'), screen: 'Bookings' },
+            { icon: '🚗', label: t('selectVehicle'), screen: 'BookRide' },
+            { icon: '💬', label: t('support'), screen: 'Bookings' },
+            { icon: '👤', label: t('profile'), screen: 'Profile' },
           ].map((item) => (
             <TouchableOpacity
               key={item.label}
@@ -104,9 +104,9 @@ export default function HomeScreen({ navigation }: any) {
       {/* Recent Bookings */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Recent Bookings</Text>
+          <Text style={styles.sectionTitle}>{t('recentBookings')}</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Bookings')}>
-            <Text style={styles.seeAll}>See All</Text>
+            <Text style={styles.seeAll}>{t('seeAll')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -115,8 +115,8 @@ export default function HomeScreen({ navigation }: any) {
         ) : recentBookings.length === 0 ? (
           <View style={styles.emptyCard}>
             <Text style={styles.emptyIcon}>📦</Text>
-            <Text style={styles.emptyText}>No bookings yet</Text>
-            <Text style={styles.emptySubText}>Book your first ride above!</Text>
+            <Text style={styles.emptyText}>{t('noBookingsYet')}</Text>
+            <Text style={styles.emptySubText}>{t('bookFirstRide')}</Text>
           </View>
         ) : (
           recentBookings.map((b) => {
@@ -138,7 +138,7 @@ export default function HomeScreen({ navigation }: any) {
                   </Text>
                 </View>
                 <View style={[styles.statusBadge, { backgroundColor: sc.bg }]}>
-                  <Text style={[styles.statusText, { color: sc.color }]}>{sc.label}</Text>
+                  <Text style={[styles.statusText, { color: sc.color }]}>{t(sc.key)}</Text>
                 </View>
               </TouchableOpacity>
             );

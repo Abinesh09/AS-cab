@@ -93,7 +93,7 @@ export default function BookingsListScreen() {
         <ActivityIndicator style={{ flex: 1 }} color="#F59E0B" size="large" />
       ) : bookings.length === 0 ? (
         <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>You have no bookings yet.</Text>
+          <Text style={styles.emptyText}>{t('noBookingsYet')}</Text>
         </View>
       ) : (
         <FlatList
