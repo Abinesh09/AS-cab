@@ -3,10 +3,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useDispatch, useSelector } from 'react-redux';
-import { Text, View } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 
 import { AppDispatch, RootState } from '../store/store';
-import { loadStoredAuth } from '../store/slices/authSlice';
+import { loadStoredAuth, logout } from '../store/slices/authSlice';
 
 // Auth Screens
 import LoginScreen from '../screens/Auth/LoginScreen';
@@ -15,12 +15,20 @@ import OTPVerifyScreen from '../screens/Auth/OTPVerifyScreen';
 // User Screens
 import HomeScreen from '../screens/User/HomeScreen';
 import BookRideScreen from '../screens/User/BookRideScreen';
+import BookingsListScreen from '../screens/User/BookingsListScreen';
 import BookingDetailScreen from '../screens/User/BookingDetailScreen';
 import ChatScreen from '../screens/User/ChatScreen';
 
-// Admin Screens
 import AdminDashboardScreen from '../screens/Admin/AdminDashboardScreen';
 import AdminBookingsScreen from '../screens/Admin/AdminBookingsScreen';
+import AdminVehiclesScreen from '../screens/Admin/AdminVehiclesScreen';
+import AdminDriversScreen from '../screens/Admin/AdminDriversScreen';
+
+// Driver Screens
+import DriverHomeScreen from '../screens/User/DriverHomeScreen';
+
+// Common Screens
+import ProfileScreen from '../screens/User/ProfileScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -118,6 +126,11 @@ function AdminTabs() {
           tabBarIcon: ({ color }) => <Text style={{ fontSize: 22, color }}>👨‍✈️</Text>,
         }}
       />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 22, color }}>👤</Text> }}
+      />
     </Tab.Navigator>
   );
 }
@@ -150,42 +163,6 @@ function DriverTabs() {
   );
 }
 
-// Placeholder screens (implement separately)
-function BookingsListScreen() {
-  return (
-    <View style={{ flex: 1, backgroundColor: '#0F172A', justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{ color: '#F8FAFC', fontSize: 18 }}>My Bookings</Text>
-    </View>
-  );
-}
-function ProfileScreen() {
-  return (
-    <View style={{ flex: 1, backgroundColor: '#0F172A', justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{ color: '#F8FAFC', fontSize: 18 }}>Profile</Text>
-    </View>
-  );
-}
-function AdminVehiclesScreen() {
-  return (
-    <View style={{ flex: 1, backgroundColor: '#0F172A', justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{ color: '#F8FAFC', fontSize: 18 }}>Manage Vehicles</Text>
-    </View>
-  );
-}
-function AdminDriversScreen() {
-  return (
-    <View style={{ flex: 1, backgroundColor: '#0F172A', justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{ color: '#F8FAFC', fontSize: 18 }}>Manage Drivers</Text>
-    </View>
-  );
-}
-function DriverHomeScreen() {
-  return (
-    <View style={{ flex: 1, backgroundColor: '#0F172A', justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{ color: '#F8FAFC', fontSize: 18 }}>My Assigned Rides</Text>
-    </View>
-  );
-}
 
 export default function RootNavigator() {
   const dispatch = useDispatch<AppDispatch>();

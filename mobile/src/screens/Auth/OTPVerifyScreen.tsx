@@ -42,8 +42,8 @@ export default function OTPVerifyScreen({ route, navigation }: any) {
       return;
     }
     dispatch(clearError());
-    const result = await dispatch(verifyOTP({ mobile, otp: code }));
-    if (!result.error) {
+    const resultAction = await dispatch(verifyOTP({ mobile, otp: code }));
+    if (verifyOTP.fulfilled.match(resultAction)) {
       // Navigation handled by RootNavigator watching auth state
     }
   };

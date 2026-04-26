@@ -14,6 +14,12 @@
   "bookings": "My Bookings",
   "chat": "Chat",
   "profile": "Profile",
+  "appLanguage": "App Language",
+  "terms": "Terms & Conditions",
+  "contactSupport": "Contact Support",
+  "userRole": "USER",
+  "adminRole": "ADMIN",
+  "driverRole": "DRIVER",
 
   "bookRide": "Book a Ride",
   "pickupLocation": "Pickup Location",

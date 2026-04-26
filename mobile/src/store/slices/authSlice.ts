@@ -35,6 +35,12 @@ export const signup = createAsyncThunk(
       const res = await authService.signup(data.name, data.mobile, data.role);
       return res.data;
     } catch (err: any) {
+      console.error('❌ Signup Error:', err);
+      if (err.response) {
+        console.error('Response Data:', err.response.data);
+      } else if (err.request) {
+        console.error('No response received. Network issue or IP mismatch.');
+      }
       return rejectWithValue(err.response?.data?.error || 'Signup failed');
     }
   }
@@ -47,6 +53,12 @@ export const login = createAsyncThunk(
       const res = await authService.login(mobile);
       return { ...res.data, mobile };
     } catch (err: any) {
+      console.error('❌ Login Error:', err);
+      if (err.response) {
+        console.error('Response Data:', err.response.data);
+      } else if (err.request) {
+        console.error('No response received. Network issue or IP mismatch.');
+      }
       return rejectWithValue(err.response?.data?.error || 'Login failed');
     }
   }

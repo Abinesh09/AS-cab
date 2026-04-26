@@ -2,14 +2,12 @@ package utils
 
 import (
 	"fmt"
-	"math/rand"
 	"time"
 )
 
-// GenerateOTP generates a 6-digit OTP
+// GenerateOTP generates a 6-digit OTP (Static 123456 for testing)
 func GenerateOTP() string {
-	rand.Seed(time.Now().UnixNano())
-	return fmt.Sprintf("%06d", rand.Intn(1000000))
+	return "123456"
 }
 
 // OTPExpiry returns the OTP expiry time (10 minutes from now)

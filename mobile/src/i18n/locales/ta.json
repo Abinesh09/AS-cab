@@ -14,6 +14,12 @@
   "bookings": "என் பதிவுகள்",
   "chat": "அரட்டை",
   "profile": "சுயவிவரம்",
+  "appLanguage": "செயலி மொழி",
+  "terms": "விதிகள் மற்றும் நிபந்தனைகள்",
+  "contactSupport": "தொடர்பு ஆதரவு",
+  "userRole": "பயனர்",
+  "adminRole": "நிர்வாகி",
+  "driverRole": "ஓட்டுநர்",
 
   "bookRide": "பயண முன்பதிவு",
   "pickupLocation": "எடுக்கும் இடம்",

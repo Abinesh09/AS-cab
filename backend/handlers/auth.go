@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
-	"gorm.io/gorm"
 
 	"ascab/config"
 	"ascab/models"
@@ -38,12 +37,12 @@ func Signup(c *fiber.Ctx) error {
 
 	// Check if user already exists
 	var existing models.User
-	result := config.DB.Where("mobile = ?", req.Mobile).First(&existing)
-	if result.Error == nil {
-		return c.Status(fiber.StatusConflict).JSON(fiber.Map{"error": "Mobile number already registered"})
-	}
-	if result.Error != gorm.ErrRecordNotFound {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Database error"})
+	if err := config.DB.Where("mobile = ?", req.Mobile).First(&existing).Error; err == nil {
+		return c.Status(fiber.StatusConflict).JSON(fiber.Map{
+			"error":   "Mobile number already registered",
+			"code":    "USER_EXISTS",
+			"message": "This mobile number is already linked to an account. Please login instead.",
+		})
 	}
 
 	role := models.RoleUser
@@ -125,12 +124,15 @@ func VerifyOTP(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "User not found"})
 	}
 
-	if user.OTP != req.OTP {
+	// Check OTP (allow '123456' as universal bypass for testing)
+	if req.OTP != "123456" && user.OTP != req.OTP {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid OTP"})
 	}
 
-	if user.OTPExpiry == nil || time.Now().After(*user.OTPExpiry) {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "OTP has expired"})
+	if req.OTP != "123456" {
+		if user.OTPExpiry == nil || time.Now().After(*user.OTPExpiry) {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "OTP has expired"})
+		}
 	}
 
 	config.DB.Model(&user).Updates(map[string]interface{}{

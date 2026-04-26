@@ -3,6 +3,7 @@ import {
   View, Text, TextInput, TouchableOpacity, ScrollView,
   StyleSheet, ActivityIndicator, Alert, Platform,
 } from 'react-native';
+import DatePicker from 'react-native-date-picker';
 import { vehicleService, bookingService } from '../../services/apiService';
 
 interface Vehicle {
@@ -20,8 +21,12 @@ export default function BookRideScreen({ navigation }: any) {
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
   const [pickup, setPickup] = useState('');
   const [drop, setDrop] = useState('');
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
+  
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date(Date.now() + 2 * 60 * 60 * 1000)); // Default 2 hours later
+  const [openStart, setOpenStart] = useState(false);
+  const [openEnd, setOpenEnd] = useState(false);
+
   const [passengers, setPassengers] = useState('1');
   const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
@@ -47,16 +52,16 @@ export default function BookRideScreen({ navigation }: any) {
   };
 
   const handleSubmit = async () => {
-    if (!selectedVehicle || !pickup || !drop || !startTime || !endTime || !passengers) {
+    if (!selectedVehicle || !pickup || !drop || !passengers) {
       Alert.alert('Error', 'Please fill all required fields');
       return;
     }
 
-    // Validate datetime format and convert to RFC3339
-    const startISO = new Date(startTime).toISOString();
-    const endISO = new Date(endTime).toISOString();
-    if (isNaN(Date.parse(startTime)) || isNaN(Date.parse(endTime))) {
-      Alert.alert('Error', 'Invalid date format. Use: YYYY-MM-DD HH:MM');
+    const startISO = startDate.toISOString();
+    const endISO = endDate.toISOString();
+
+    if (endDate <= startDate) {
+      Alert.alert('Error', 'End time must be after start time');
       return;
     }
 
@@ -179,25 +184,54 @@ export default function BookRideScreen({ navigation }: any) {
           <View style={styles.row}>
             <View style={{ flex: 1, marginRight: 8 }}>
               <Text style={styles.label}>Start Date & Time *</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="2024-12-25 10:00"
-                placeholderTextColor="#475569"
-                value={startTime}
-                onChangeText={setStartTime}
-              />
+              <TouchableOpacity style={styles.datePickerBtn} onPress={() => setOpenStart(true)}>
+                <Text style={styles.datePickerText}>
+                  {startDate.toLocaleString([], { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                </Text>
+              </TouchableOpacity>
             </View>
             <View style={{ flex: 1 }}>
               <Text style={styles.label}>End Date & Time *</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="2024-12-25 18:00"
-                placeholderTextColor="#475569"
-                value={endTime}
-                onChangeText={setEndTime}
-              />
+              <TouchableOpacity style={styles.datePickerBtn} onPress={() => setOpenEnd(true)}>
+                <Text style={styles.datePickerText}>
+                  {endDate.toLocaleString([], { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
+          
+          <DatePicker
+            modal
+            open={openStart}
+            date={startDate}
+            mode="datetime"
+            onConfirm={(date) => {
+              setOpenStart(false);
+              setStartDate(date);
+              // auto push end date if needed
+              if (date >= endDate) {
+                setEndDate(new Date(date.getTime() + 2 * 60 * 60 * 1000));
+              }
+            }}
+            onCancel={() => {
+              setOpenStart(false);
+            }}
+          />
+
+          <DatePicker
+            modal
+            open={openEnd}
+            date={endDate}
+            mode="datetime"
+            minimumDate={startDate}
+            onConfirm={(date) => {
+              setOpenEnd(false);
+              setEndDate(date);
+            }}
+            onCancel={() => {
+              setOpenEnd(false);
+            }}
+          />
 
           <Text style={styles.label}>Passengers *</Text>
           <TextInput
@@ -314,6 +348,18 @@ const styles = StyleSheet.create({
     color: '#F8FAFC',
     borderWidth: 1,
     borderColor: '#334155',
+  },
+  datePickerBtn: {
+    backgroundColor: '#1E293B',
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 15,
+    borderWidth: 1,
+    borderColor: '#334155',
+  },
+  datePickerText: {
+    fontSize: 14,
+    color: '#F8FAFC',
   },
   row: { flexDirection: 'row' },
   priceSummary: {

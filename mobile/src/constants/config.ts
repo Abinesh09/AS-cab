@@ -1,10 +1,10 @@
 // API Base URL - change to your VPS IP or domain in production
 export const API_BASE_URL = __DEV__
-  ? 'http://192.168.1.3:8080/api/v1'
+  ? 'http://192.168.1.4:8080/api/v1'
   : 'https://api.yourdomain.com/api/v1';
 
 export const WS_BASE_URL = __DEV__
-  ? 'ws://192.168.1.3:8080/api/v1'
+  ? 'ws://192.168.1.4:8080/api/v1'
   : 'wss://api.yourdomain.com/api/v1';
 
 // App Config

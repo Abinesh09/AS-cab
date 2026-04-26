@@ -11,6 +11,10 @@ func RegisterRoutes(app *fiber.App) {
 	api := app.Group("/api/v1")
 
 	// ─── Public Routes ────────────────────────────────────────────────────────
+	api.Get("/test", func(c *fiber.Ctx) error {
+		return c.SendString("Backend is reachable!")
+	})
+	
 	auth := api.Group("/auth")
 	auth.Post("/signup", handlers.Signup)
 	auth.Post("/login", handlers.Login)
